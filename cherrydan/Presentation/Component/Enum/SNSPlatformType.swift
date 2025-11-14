@@ -49,7 +49,7 @@ enum SNSPlatformType: CaseIterable, Codable {
         case .clip: "네이버 클립"
         case .reels: "인스타그램 릴스"
         case .shorts: "유튜브 쇼츠"
-        case .etc: "기타 SNS"
+        case .etc: "기타"
         }
     }
     
