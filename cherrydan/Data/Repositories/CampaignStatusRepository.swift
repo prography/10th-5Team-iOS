@@ -7,12 +7,16 @@ class CampaignStatusRepository {
         self.networkAPI = networkAPI
     }
     
-    func getMyCampaings(for status: CampaignStatusType, page: Int = 0) async throws -> PageableResponse<MyCampaignDTO> {
-        let query: [String:String] = [
+    func getMyCampaings(for status: CampaignStatusType, subStatus: CampaignSubStatusLabel? = nil, page: Int = 0) async throws -> PageableResponse<MyCampaignDTO> {
+        var query: [String:String] = [
             "status": status.apiValue,
             "page": String(page),
             "size": "20"
         ]
+        
+        if let subStatus {
+            query["subStatus"] = subStatus.apiValue
+        }
         let response: APIResponse<PageableResponse<MyCampaignDTO>> = try await networkAPI.request(CampaignStatusEndpoint.getMyCampaigns, queryParameters: query)
         return response.result
     }
