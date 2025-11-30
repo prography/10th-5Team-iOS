@@ -8,9 +8,10 @@ class SNSRepository {
     }
     
     /// 네이버 블로그 인증 및 연동
-    func verifyNaverBlog(blogUrl: String) async throws -> NaverVerifyResponseDTO {
-        let parameters = [
-            "blog_url": blogUrl
+    func verifyNaverBlog(blogUrl: String, verificationCode: String) async throws -> NaverVerifyResponseDTO {
+        let parameters: [String: Any] = [
+            "code": verificationCode,
+            "blogUrl": blogUrl
         ]
         let response: APIResponse<NaverVerifyResponseDTO> = try await networkAPI.request(
             SNSEndpoint.naverVerify,
@@ -26,14 +27,11 @@ class SNSRepository {
         return response.result
     }
     
-    func handleOAuthCallback(platform: String, code: String, state: String? = nil) async throws -> OAuthCallbackResponseDTO {
-        var queryParameters: [String: String] = [
-            "code": code
+    func handleOAuthCallback(platform: String, code: String, state: String) async throws -> OAuthCallbackResponseDTO {
+        let queryParameters: [String: String] = [
+            "code": code,
+            "state": state
         ]
-        
-        if let state = state {
-            queryParameters["state"] = state
-        }
         
         let response: APIResponse<OAuthCallbackResponseDTO> = try await networkAPI.request(
             SNSEndpoint.oauthCallback(platform: platform),

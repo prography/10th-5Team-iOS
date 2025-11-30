@@ -16,15 +16,19 @@ class BookmarkRepository {
     
     /// 북마크 취소 (is_active = false)
     func cancelBookmark(campaignId: Int) async throws {
+        let params = ["campaignIds": [campaignId]]
         let _: EmptyResult = try await networkAPI.request(
-            BookmarkEndpoint.cancelBookmark(campaignId: campaignId)
+            BookmarkEndpoint.cancelBookmarks,
+            parameters: params
         )
     }
     
     /// 북마크 완전 삭제
     func deleteBookmark(campaignId: Int) async throws {
+        let params = ["campaignIds": [campaignId]]
         let _: EmptyResult = try await networkAPI.request(
-            BookmarkEndpoint.deleteBookmark(campaignId: campaignId)
+            BookmarkEndpoint.deleteBookmarks,
+            parameters: params
         )
     }
     
@@ -32,11 +36,12 @@ class BookmarkRepository {
     func getOpenBookmarks(page: Int = 0) async throws -> PageableResponse<MyCampaignDTO> {
         let query = [
             "page": "\(page)",
-            "size": "20"
+            "size": "20",
+            "case": "open"
         ]
         
         let response: APIResponse<PageableResponse<MyCampaignDTO>> = try await networkAPI.request(
-            BookmarkEndpoint.getOpenBookmarks,
+            BookmarkEndpoint.getBookmarks,
             queryParameters: query
         )
         return response.result
@@ -45,11 +50,12 @@ class BookmarkRepository {
     func getClosedBookmarks(page: Int = 0) async throws -> PageableResponse<MyCampaignDTO> {
         let query = [
             "page": "\(page)",
-            "size": "20"
+            "size": "20",
+            "case": "closed"
         ]
         
         let response: APIResponse<PageableResponse<MyCampaignDTO>> = try await networkAPI.request(
-            BookmarkEndpoint.getClosedBookmarks,
+            BookmarkEndpoint.getBookmarks,
             queryParameters: query
         )
         return response.result

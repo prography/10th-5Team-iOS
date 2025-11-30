@@ -11,7 +11,7 @@ class NoticeBoardRepository {
         let query: [String: String] = [
             "page": String(page),
             "size": String(size),
-            "sort": "publishedAt,desc"
+            "sort": "updatedAt,desc"
         ]
         
         do {
@@ -41,6 +41,20 @@ class NoticeBoardRepository {
             return try await networkAPI.request(NoticeBoardEndpoint.getNoticeBoardBanner)
         } catch {
             print("NoticeBoardRepository Banner Error: \(error)")
+            throw error
+        }
+    }
+    
+    func toggleEmpathy(id: Int, isEmpathy: Bool) async throws -> APIResponse<NoticeBoardDTO> {
+        let query = ["isEmpathy": String(isEmpathy)]
+        
+        do {
+            return try await networkAPI.request(
+                NoticeBoardEndpoint.toggleEmpathy(id: id),
+                queryParameters: query
+            )
+        } catch {
+            print("NoticeBoardRepository Empathy Error: \(error)")
             throw error
         }
     }

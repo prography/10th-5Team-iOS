@@ -40,6 +40,13 @@ class ActivityRepository {
             parameters: params
         )
     }
+    
+    /// 활동 알림 개수 조회
+    func getActivityNotificationCount() async throws -> Int64 {
+        let response: APIResponse<Int64> = try await networkAPI.request(
+            ActivityEndpoint.getActivityNotificationCount
+        )
+        return response.result
+    }
 }
-
 
