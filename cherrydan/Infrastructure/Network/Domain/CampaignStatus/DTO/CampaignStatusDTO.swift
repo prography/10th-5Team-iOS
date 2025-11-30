@@ -25,16 +25,11 @@ struct CampaignStatusPopupItemDTO: Codable {
     let imageUrl: String
     let reviewerAnnouncementStatus: String
     let benefit: String
-    let statusLabel: String
 }
 
 struct CampaignStatusPopupResponseDTO: Codable {
-    let applyTotal: Int
-    let selectedTotal: Int
-    let registeredTotal: Int
-    let apply: [CampaignStatusPopupItemDTO]
-    let selected: [CampaignStatusPopupItemDTO]
-    let registered: [CampaignStatusPopupItemDTO]
+    let totalCount: Int
+    let items: [CampaignStatusPopupItemDTO]
 }
 
 struct CampaignStatusCountDTO: Codable {

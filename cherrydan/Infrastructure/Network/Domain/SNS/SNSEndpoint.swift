@@ -8,15 +8,15 @@ enum SNSEndpoint: APIEndpoint {
     var path: String {
         switch self {
         case .naverVerify:
-            "/sns/naver/verify"
+            "/v1/sns/naver/verify"
         case .oauthCallback(let platform):
-            "/sns/oauth/\(platform)/callback"
+            "/v1/sns/oauth/\(platform)/callback"
         case .oauthAuthUrl(let platform):
-            "/sns/oauth/\(platform)/auth-url"
+            "/v1/sns/oauth/\(platform)/auth-url"
         case .getConnections:
-            "/sns/connections"
+            "/v1/sns/connections"
         case .disconnect(let platform):
-            "/sns/disconnect/\(platform)"
+            "/v1/sns/disconnect/\(platform)"
         }
     }
     

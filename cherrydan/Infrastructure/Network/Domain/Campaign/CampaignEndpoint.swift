@@ -5,6 +5,7 @@ enum CampaignEndpoint: APIEndpoint {
     case getCampaignByRegion
     case getCampaignBySNSPlatform
     case getCampaignByCampaignPlatform
+    case getCampaignByType
     
     case getCampaignSites
     
@@ -20,6 +21,8 @@ enum CampaignEndpoint: APIEndpoint {
             "/campaigns/sns-platforms"
         case .getCampaignByCampaignPlatform:
             "/campaigns/campaign-platforms"
+        case .getCampaignByType:
+            "/campaigns/types"
         case .getCampaignByReporter:
             "/campaigns/reporter"
         case .getCampaignByProduct:
@@ -42,11 +45,10 @@ enum CampaignEndpoint: APIEndpoint {
     }
     
     var tokenType: TokenType {
-        if let _ = KeychainManager.shared.getAccessToken() {
-            .accessToken
-        } else {
+//        if let _ = KeychainManager.shared.getAccessToken() {
+//            .accessToken
+//        } else {
             .none
-        }
+//        }
     }
 }
-

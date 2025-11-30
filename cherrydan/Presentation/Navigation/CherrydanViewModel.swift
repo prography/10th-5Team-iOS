@@ -4,15 +4,22 @@ import SwiftUI
 @MainActor
 class CherrydanViewModel: ObservableObject {
     @Published var isInitializing = true
+    @Published var showCampaignPopup = false
+    @Published var popupCampaigns: [CampaignStatusPopupItem] = []
     
     private let myPageRepository: MyPageRepository
+    private let campaignStatusRepository: CampaignStatusRepository
     
     private var currentAppVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.2"
     }
     
-    init(myPageRepository: MyPageRepository =  MyPageRepository()) {
+    init(
+        myPageRepository: MyPageRepository = MyPageRepository(),
+        campaignStatusRepository: CampaignStatusRepository = CampaignStatusRepository()
+    ) {
         self.myPageRepository = myPageRepository
+        self.campaignStatusRepository = campaignStatusRepository
         initialize()
     }
     
@@ -25,6 +32,7 @@ class CherrydanViewModel: ObservableObject {
                     minVersion: response.minSupportedVersion
                 )
                 await handleAuthState()
+                await fetchCampaignStatusPopup()
             } catch {
                 print("Failed to get version info: \(error)")
             }
@@ -41,6 +49,25 @@ class CherrydanViewModel: ObservableObject {
             print("리프레시 토큰 존재 & 재발급 실패하여 자동 로그아웃")
             AuthManager.shared.logout()
         }
+    }
+    
+    private func fetchCampaignStatusPopup() async {
+        guard AuthManager.shared.isLoggedIn else { return }
+        
+        do {
+            let response = try await campaignStatusRepository.getPopupStatus()
+            let items = response.items.map { $0.toDomain() }
+            if !items.isEmpty {
+                popupCampaigns = items
+                showCampaignPopup = true
+            }
+        } catch {
+            print("Failed to fetch campaign status popup: \(error)")
+        }
+    }
+    
+    func dismissCampaignPopup() {
+        showCampaignPopup = false
     }
     
     private func handleVersionCheck(newVersion: String, minVersion: String) {

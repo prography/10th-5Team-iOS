@@ -60,6 +60,25 @@ struct CherrydanView: View {
             isPresented: $toastManager.toastPresented,
             data: toastManager.currentToastType
         )
+        .overlay {
+            if viewModel.showCampaignPopup {
+                ZStack {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            viewModel.dismissCampaignPopup()
+                        }
+                    
+                    CDCampaignPopup(
+                        campaigns: viewModel.popupCampaigns,
+                        onConfirm: {
+                            selectedTab = 1
+                            viewModel.dismissCampaignPopup()
+                        }
+                    )
+                }
+            }
+        }
         .onChange(of: authManager.isLoggedIn) { _, isLoggedIn in
             if !isLoggedIn {
                 homeRouter.reset()

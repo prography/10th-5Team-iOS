@@ -96,7 +96,7 @@ class MyCampaignViewModel: ObservableObject {
                 return try await bookmarkRepository.getClosedBookmarks(page: page)
             }
         case .campaignStatus(let type, let subStatus):
-            return try await campaignStatusRepository.getMyCampaings(for: type, subStatus: subStatus, page: page)
+            return try await campaignStatusRepository.getMyCampaings(for: filter, page: page)
         }
     }
     

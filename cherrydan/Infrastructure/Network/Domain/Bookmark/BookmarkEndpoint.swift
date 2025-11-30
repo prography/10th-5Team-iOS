@@ -1,34 +1,29 @@
 enum BookmarkEndpoint: APIEndpoint {
     case addBookmark(campaignId: Int)
-    case cancelBookmark(campaignId: Int)
-    case deleteBookmark(campaignId: Int)
-    case getOpenBookmarks
-    case getClosedBookmarks
-    
+    case cancelBookmarks
+    case deleteBookmarks
+    case getBookmarks
+
     var path: String {
         switch self {
         case .addBookmark(let campaignId):
             "/campaigns/\(campaignId)/bookmark"
-        case .cancelBookmark(let campaignId):
-            "/campaigns/\(campaignId)/bookmark"
-        case .deleteBookmark(let campaignId):
-            "/campaigns/\(campaignId)/bookmark"
-        case .getOpenBookmarks:
-            "/campaigns/bookmarks/open"
-        case .getClosedBookmarks:
-            "/campaigns/bookmarks/closed"
+        case .cancelBookmarks, .deleteBookmarks:
+            "/campaigns/bookmark"
+        case .getBookmarks:
+            "/campaigns/bookmarks"
         }
     }
-    
+
     var method: HTTPMethod {
         switch self {
         case .addBookmark:
             .post
-        case .cancelBookmark:
+        case .cancelBookmarks:
             .patch
-        case .deleteBookmark:
+        case .deleteBookmarks:
             .delete
-        case .getOpenBookmarks, .getClosedBookmarks:
+        case .getBookmarks:
             .get
         }
     }

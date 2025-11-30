@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CDCampaignPopup: View {
-    let campaigns: [Campaign]
+    let campaigns: [CampaignStatusPopupItem]
     let onConfirm: () -> Void
     
     var body: some View {
@@ -9,16 +9,10 @@ struct CDCampaignPopup: View {
             Image("close_white_big")
             
             VStack(alignment: .leading, spacing: 0) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("체험단 선정알림이 지난 캠페인이 \(campaigns.count)건 있어요.")
-                        .font(.t5)
-                        .foregroundStyle(.gray5)
-                    
-                    Text("선정 여부를 확인해 보세요!")
-                        .font(.t2)
-                        .foregroundStyle(.gray9)
-                }
-                .padding(.bottom, 10)
+                Text("선정 여부를 확인해 보세요!")
+                    .font(.t2)
+                    .foregroundStyle(.gray9)
+                    .padding(.bottom, 10)
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(spacing: 20) {
@@ -41,7 +35,7 @@ struct CDCampaignPopup: View {
     }
     
     @ViewBuilder
-    private func campaignRow(_ campaign: Campaign) -> some View {
+    private func campaignRow(_ campaign: CampaignStatusPopupItem) -> some View {
         HStack(alignment: .center, spacing: 12) {
             AsyncImage(url: URL(string: campaign.imageUrl)) { image in
                 image
@@ -55,13 +49,15 @@ struct CDCampaignPopup: View {
             .cornerRadius(4)
             
             VStack(alignment: .leading, spacing: 4) {
-//                Text(campaign.date.daysAgoString())
-//                    .font(.m5b)
-//                    .foregroundStyle(.mPink3)
+                Text(campaign.reviewerAnnouncementStatus)
+                    .font(.m5b)
+                    .foregroundStyle(.mPink3)
+                
                 Text(campaign.title)
                     .font(.m5b)
                     .foregroundStyle(.gray9)
                     .lineLimit(2)
+                
                 Text(campaign.benefit)
                     .font(.m5r)
                     .foregroundStyle(.gray9)

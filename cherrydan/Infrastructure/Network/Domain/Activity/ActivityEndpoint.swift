@@ -2,6 +2,7 @@ enum ActivityEndpoint: APIEndpoint {
     case getActivityNotification
     case deleteActivityNotifications
     case markActivityAlertsAsRead
+    case getActivityNotificationCount
     
     var path: String {
         switch self {
@@ -11,6 +12,8 @@ enum ActivityEndpoint: APIEndpoint {
             "/activity/bookmark-alerts"
         case .markActivityAlertsAsRead:
             "/activity/bookmark-alerts/read"
+        case .getActivityNotificationCount:
+            "/activity/bookmark-alerts/count"
         }
     }
     
@@ -22,6 +25,8 @@ enum ActivityEndpoint: APIEndpoint {
                 .delete
         case .markActivityAlertsAsRead:
                 .patch
+        case .getActivityNotificationCount:
+                .get
         }
     }
     

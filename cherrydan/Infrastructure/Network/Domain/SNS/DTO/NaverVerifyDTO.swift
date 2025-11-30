@@ -1,10 +1,12 @@
 import Foundation
 
 struct NaverVerifyRequestDTO: Codable {
+    let code: String
     let blogUrl: String
     
     enum CodingKeys: String, CodingKey {
-        case blogUrl = "blog_url"
+        case code
+        case blogUrl
     }
 }
 

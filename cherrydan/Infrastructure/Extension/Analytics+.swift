@@ -7,9 +7,7 @@ extension Analytics {
     ///   - screenName: 화면 이름 (analyticsName)
     ///   - screenClass: 화면 클래스명 (선택사항)
     static func logScreenView(screenName: String, screenClass: String? = nil) {
-        var parameters: [String: Any] = [
-            AnalyticsParameterScreenName: screenName
-        ]
+        var parameters: [String: Any] = [AnalyticsParameterScreenName: screenName]
         
         if let screenClass = screenClass {
             parameters[AnalyticsParameterScreenClass] = screenClass
