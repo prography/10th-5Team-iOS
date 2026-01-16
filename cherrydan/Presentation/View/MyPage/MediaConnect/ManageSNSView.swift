@@ -20,8 +20,8 @@ struct ManageSNSView: View {
             Spacer()
         }
         .sheet(isPresented: $viewModel.showNaverBottomSheet) {
-            NaverSNSBottomSheet(onConnect: { blogUrl in
-                viewModel.connectNaverBlog(blogUrl: blogUrl)
+            NaverSNSBottomSheet(onConnect: { blogUrl, verificationCode in
+                viewModel.connectNaverBlog(blogUrl: blogUrl, verificationCode: verificationCode)
             })
         }
         .sheet(isPresented: $viewModel.showSNSBottomSheet) {

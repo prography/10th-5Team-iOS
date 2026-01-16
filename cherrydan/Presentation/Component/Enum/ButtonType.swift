@@ -26,13 +26,15 @@ enum ButtonType {
                 .gray0
         case .smallGray:
                 .gray2
-        case .smallPrimary, .middlePrimary, .largePrimary:
+        case .smallPrimary:
+                .mPink2
+        case .middlePrimary, .largePrimary:
                 .mPink3
         case .largeGray:
-                .clear
+                .gray0
         }
     }
-    
+
     var foregroundColor: Color {
         switch self {
         case .smallWhite:
@@ -43,11 +45,20 @@ enum ButtonType {
                 .gray0
         }
     }
+
+    var strokeColor: Color? {
+        switch self {
+        case .largeGray:
+                .gray3
+        default:
+                nil
+        }
+    }
     
     var height: CGFloat {
         switch self {
         case .smallPrimary, .smallGray, .smallWhite:
-            36
+            44
         default:
             56
         }

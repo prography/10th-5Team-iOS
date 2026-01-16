@@ -18,7 +18,7 @@ struct ToastViewModifier: ViewModifier {
                 if isPresented, let toastType {
                     CDToast(toastType: toastType)
                         .padding(.bottom, 40)
-                        .padding(.horizontal, 24)
+                        .padding(.horizontal, 16)
                         .opacity(isAnimating ? 1 : 0)
                         .offset(y: isAnimating ? 0 : -80)
                         .animation(.spring(response: 0.5, dampingFraction: 0.8), value: isAnimating)

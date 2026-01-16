@@ -13,11 +13,10 @@ struct MyCampaignNavigationStack: View {
     var body: some View {
         NavigationStack(path: $router.path) {
             VStack (spacing: 0){
-                MyCampaignView()
+                MyCampaignView(onNavigateToHomeTab: {
+                    selectedTab = 0
+                })
                 CDBottomTab(selectedTab: $selectedTab)
-            }
-            .onAppear {
-                router.logScreenView(for: .category)
             }
             .navigationDestination(for: MyCampaignRoute.self) { route in
                 destinationView(for: route)
@@ -32,11 +31,6 @@ struct MyCampaignNavigationStack: View {
     @ViewBuilder
     private func destinationView(for route: MyCampaignRoute) -> some View {
         switch route {
-        case .category:
-            VStack (spacing: 0){
-                MyCampaignView()
-                CDBottomTab(selectedTab: $selectedTab)
-            }
         case .categoryDetail: EmptyView()
         case .campaignWeb(let siteNameKr, let campaignSiteUrl):
             CampaignWebView(siteNameKr: siteNameKr, campaignSiteUrl: campaignSiteUrl)

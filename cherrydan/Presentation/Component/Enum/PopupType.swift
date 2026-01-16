@@ -9,7 +9,8 @@ enum PopupType {
     case confirmStatusChange(status: String, onClick:() -> Void)
     case visitCompletion(onVisitCompleted: () -> Void, onVisitIncomplete: () -> Void)
     case reviewWritingCompletion(onConfirm: () -> Void)
-    case passFailSelection(onPass: () -> Void, onFail: () -> Void)
+    case confirmCampaignDelete(onConfirm: () -> Void)
+    case changeCampaignStatus(currentStatus: CampaignStatusType?, onConfirm: (CampaignStatusType) -> Void)
     case custom(PopupConfig)
     
     var config: PopupConfig {
@@ -101,15 +102,23 @@ enum PopupType {
                 ],
                 buttonLayout: .horizontal
             )
-        case .passFailSelection(let onPass, let onFail):
+        case .confirmCampaignDelete(let onConfirm):
             PopupConfig(
                 image: nil,
-                title: "합격/불합격 선택",
-                description: "결과를 선택해주세요.",
+                title: "정말 삭제할까요?",
+                description: "삭제한 공고는 되돌릴 수 없어요.",
                 buttons: [
-                    ButtonConfig(text: "불합격", type: .largeGray, onClick: onFail),
-                    ButtonConfig(text: "합격", type: .largePrimary, onClick: onPass)
+                    ButtonConfig(text: "취소", type: .largeGray, onClick: {}),
+                    ButtonConfig(text: "삭제", type: .largePrimary, onClick: onConfirm)
                 ],
+                buttonLayout: .horizontal
+            )
+        case .changeCampaignStatus:
+            PopupConfig(
+                image: nil,
+                title: "",
+                description: "",
+                buttons: [],
                 buttonLayout: .horizontal
             )
         case .custom(let config):

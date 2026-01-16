@@ -4,98 +4,79 @@ struct MyCampaignView: View {
     @EnvironmentObject private var router: MyCampaignRouter
     @StateObject private var viewModel = MyCampaignViewModel()
     
-    @State private var isShowingChangeStatusBottomSheet = false
-    @State private var selectedStatusForChange: CampaignStatusType? = nil
+    let onNavigateToHomeTab: () -> Void
     
     var body: some View {
-        CDScreen(
-            horizontalPadding: 0,
-            isLoading: viewModel.isLoading
-        ) {
-            CDHeaderWithRightContent(title: "내 체험단"){
-                if !viewModel.isDeleteMode {
-                    Button(action: {
-                        viewModel.isDeleteMode = true
-                    }){
-                        Image("trash")
-                    }
-                }
+        ZStack {
+            CDScreen(horizontalPadding: 0, isLoading: viewModel.isLoading) {
+                CDHeaderWithRightContent(title: "나의 공고"){}
+                    .padding(.horizontal, 16)
+                
+                tabSection
+                    .padding(.top, 24)
+                
+                subFilterSection
+                    .padding(.vertical, 12)
+                
+                campaignListSection
             }
-            .padding(.horizontal, 16)
-            
-            tabSection
-                .padding(.top, 24)
-            
-            subFilterSection
-                .padding(.vertical, 12)
-            
-            campaignListSection
-        }
-        .sheet(isPresented: $isShowingChangeStatusBottomSheet) {
-            ChangeCampaignStatusBottomSheet(
-                isPresented: $isShowingChangeStatusBottomSheet,
-                selectedStatus: $selectedStatusForChange,
-                onStatusSelected: { status in
-                    viewModel.updateSelectedCampaignsStatus(to: status)
-                    isShowingChangeStatusBottomSheet = false
-                    selectedStatusForChange = nil
-                }
-            )
+            .sheet(
+                isPresented: $viewModel.isCampaignActionSheetPresent,
+                onDismiss: { viewModel.focusedCampaign = nil }
+            ) {
+                CampaignActionBottomSheet(
+                    onDelete: {
+                        guard let campaignId = viewModel.focusedCampaign?.campaignId else { return }
+                        PopupManager.shared.show(.confirmCampaignDelete {
+                            viewModel.deleteCampaign(campaignId: campaignId)
+                        })
+                    },
+                    onChangeStatus: {
+                        guard let campaignId = viewModel.focusedCampaign?.campaignId else { return }
+                        viewModel.isCampaignActionSheetPresent = false
+                        PopupManager.shared.show(.changeCampaignStatus(
+                            currentStatus: viewModel.selectedSubFilter.statusType,
+                            onConfirm: { status in
+                                viewModel.changeCampaignStatus(campaignId: campaignId, to: status)
+                            })
+                        )
+                    }
+                )
+            }
+            .sheet(
+                isPresented: $viewModel.isConfirmCampaignStatusSheetPresent,
+                onDismiss: { viewModel.focusedCampaign = nil }
+            ) {
+                ConfirmCampaignStatusBottomSheet(
+                    onStatusSelected: { status in
+                        if let campaign = viewModel.focusedCampaign {
+                            viewModel.changeCampaignStatus(campaignId: campaign.campaignId, to: status)
+                        }
+                    }
+                )
+            }
         }
     }
     
     @ViewBuilder
     private var campaignListSection: some View {
-        openSection
-    }
-    
-    @ViewBuilder
-    private var subFilterSection: some View {
-        if viewModel.subFilters.count > 1 {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(viewModel.subFilters) { subFilter in
-                        let isSelected = subFilter == viewModel.selectedSubFilter
-                        Button(action: {
-                            viewModel.selectSubFilter(subFilter)
-                        }) {
-                            Text(subFilter.title)
-                                .font(.m5r)
-                                .foregroundStyle(isSelected ? .gray0 : .gray5)
-                                .padding(.horizontal, 16)
-                                .frame(height: 32, alignment: .center)
-                                .background(isSelected ? .gray5 : .gray2, in: RoundedRectangle(cornerRadius: 16))
-                        }
-                    }
-                }
-                .padding(.horizontal, 16)
-            }
-        }
-    }
-    
-    private var openSectionPlaceholder: some View {
-        Text(viewModel.emptyStateMessage)
-            .font(.m4r)
-            .foregroundStyle(.gray5)
-            .padding(.vertical, 120)
-            .frame(maxWidth: .infinity, alignment: .center)
-    }
-    
-    private var openSection: some View {
         ScrollView(.vertical, showsIndicators: false) {
             if viewModel.campaigns.isEmpty {
                 openSectionPlaceholder
             } else {
                 LazyVStack(spacing: 0) {
+                    if [.writingReview, .writingDone].contains(viewModel.selectedCampaignStatus) {
+                        Spacer().frame(height: 16)
+                    }
+                    
                     ForEach(Array(zip(viewModel.campaigns.indices, viewModel.campaigns)), id: \.1.id) { index, campaign in
                         VStack(spacing: 0) {
                             MyCampaignRow(
                                 myCampaign: campaign,
                                 buttonConfigs: viewModel.getButtonConfigs(for: campaign, router: router),
-                                isDeleteMode: viewModel.isDeleteMode,
-                                isSelected: viewModel.selectedCampaignIds.contains(campaign.campaignId),
-                                onSelectionToggle: {
-                                    viewModel.toggleCampaignSelection(campaignId: campaign.campaignId)
+                                onDetailTap: {
+                                    viewModel.focusedCampaign = campaign
+                                    viewModel.isCampaignActionSheetPresent = true
                                 }
                             )
                             .onAppear {
@@ -115,6 +96,54 @@ struct MyCampaignView: View {
             }
         }
         .transition(.move(edge: .leading))
+    }
+    
+    @ViewBuilder
+    private var subFilterSection: some View {
+        if viewModel.subFilters.count > 1 {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(viewModel.subFilters) { subFilter in
+                        let isSelected = subFilter == viewModel.selectedSubFilter
+                        Button(action: {
+                            viewModel.selectedSubFilter = subFilter
+                        }) {
+                            HStack(spacing: 4) {
+                                Text(subFilter.title)
+                                if let count = viewModel.getCountForSubFilter(subFilter) {
+                                    Text("\(count)")
+                                }
+                            }
+                            .font(.m5r)
+                            .foregroundStyle(isSelected ? .gray0 : .gray5)
+                            .padding(.horizontal, 16)
+                            .frame(height: 32, alignment: .center)
+                            .background(isSelected ? .gray5 : .gray2, in: RoundedRectangle(cornerRadius: 16))
+                        }
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
+        }
+    }
+    
+    private var openSectionPlaceholder: some View {
+        VStack(spacing: 12) {
+            Image("logo_placeholder")
+            
+            Text(viewModel.emptyStateMessage)
+                .font(.t3)
+                .foregroundStyle(.gray9)
+                .padding(.bottom, 12)
+                .multilineTextAlignment(.center)
+            
+            CDButton(text: "공고 구경하러 가기"){
+                onNavigateToHomeTab()
+            }
+            .frame(width: 180)
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding(.top, 80)
     }
     
     private var tabSection: some View {
@@ -138,7 +167,6 @@ struct MyCampaignView: View {
         Button(action: {
             viewModel.selectedCampaignStatus = category
         }) {
-            
             VStack(spacing: 8) {
                 HStack(spacing: 4) {
                     Text(category.displayText)
@@ -161,5 +189,6 @@ struct MyCampaignView: View {
 }
 
 #Preview {
-    MyCampaignView()
-} 
+    MyCampaignView(onNavigateToHomeTab: {})
+        .environmentObject(MyCampaignRouter())
+}

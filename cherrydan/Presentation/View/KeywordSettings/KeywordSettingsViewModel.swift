@@ -51,7 +51,6 @@ class KeywordSettingsViewModel: ObservableObject {
             return (false, "\"\(trimmedKeyword)\" 키워드는 추가할 수 없습니다")
         }
         
-        
         // 글자수 체크
         if trimmedKeyword.count < minKeywordLength {
             return (false, "키워드는 최소 \(minKeywordLength)자 이상 입력해주세요.")
@@ -89,7 +88,7 @@ class KeywordSettingsViewModel: ObservableObject {
             do {
                 isLoading = true
                 try await keywordRepository.addUserKeyword(keyword: newKeyword.trimmingCharacters(in: .whitespacesAndNewlines))
-                ToastManager.shared.show(.success("키워드 알림이 등록되었습니다"))
+                ToastManager.shared.show(.success("키워드 알림이 등록되었습니다", nil))
                 newKeyword = ""
                 loadUserKeywords() // 목록 새로고침
             } catch {
@@ -106,7 +105,7 @@ class KeywordSettingsViewModel: ObservableObject {
             do {
                 isLoading = true
                 try await keywordRepository.deleteUserKeyword(keywordId: keyword.id)
-                ToastManager.shared.show(.success("\"\(keyword.keyword)\" 키워드 삭제가 완료되었습니다."))
+                ToastManager.shared.show(.success("\"\(keyword.keyword)\" 키워드 삭제가 완료되었습니다.", nil))
                 loadUserKeywords()
             } catch {
                 ToastManager.shared.show(.errorWithMessage("키워드 삭제 중 오류가 발생했습니다."))
@@ -124,4 +123,4 @@ class KeywordSettingsViewModel: ObservableObject {
     var keywordCountInfo: String {
         return "\(userKeywords.count)/\(maxKeywordCount)"
     }
-} 
+}

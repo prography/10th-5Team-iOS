@@ -42,7 +42,8 @@ class CampaignStatusRepository {
         return response.result
     }
     
-    func deleteStatus(request: DeleteRequest) async throws -> Void {
+    func deleteStatus(_ campaignId: Int) async throws -> Void {
+        let request = DeleteRequest(campaignIds: [campaignId])
         let _: APIResponse<EmptyResult> = try await networkAPI.request(CampaignStatusEndpoint.deleteStatus, parameters: request.dictionaryFormat)
     }
     

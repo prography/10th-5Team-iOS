@@ -232,12 +232,12 @@ extension OnboardingViewModel: NaverThirdPartyLoginConnectionDelegate {
     func oauth20Connection(_ oauthConnection: NaverThirdPartyLoginConnection!, didFailWithError error: Error!) {
         print("네이버 로그인 실패: \(error.localizedDescription)")
         Task { @MainActor in
-            // 취소 케이스 체크 (사용자가 취소한 경우)
             if error.localizedDescription.contains("cancelled") || error.localizedDescription.contains("사용자") {
                 print("네이버 로그인 취소됨")
             } else {
                 ToastManager.shared.show(.errorWithMessage("네이버 로그인 중 오류가 발생했습니다: \(error.localizedDescription)"))
             }
+            
             self.isLoading = false
         }
     }
@@ -251,7 +251,6 @@ extension OnboardingViewModel: NaverThirdPartyLoginConnectionDelegate {
                     return
                 }
                 
-                // 네이버 사용자 정보 수집
                 await self.fetchNaverUserInfo(token: accessToken)
             }
         }

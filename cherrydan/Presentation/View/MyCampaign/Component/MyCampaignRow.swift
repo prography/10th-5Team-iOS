@@ -4,35 +4,23 @@ import Kingfisher
 struct MyCampaignRow: View {
     let myCampaign: MyCampaign
     let buttonConfigs: [ButtonConfig]
-    let isDeleteMode: Bool
-    let isSelected: Bool
-    let onSelectionToggle: () -> Void
-    
+    let onDetailTap: () -> Void
+
     @State private var didFailToLoadThumbnailImage: Bool = false
-    
+
     init(
         myCampaign: MyCampaign,
         buttonConfigs: [ButtonConfig] = [],
-        isDeleteMode: Bool = false,
-        isSelected: Bool = false,
-        onSelectionToggle: @escaping () -> Void = {}
+        onDetailTap: @escaping () -> Void = {}
     ) {
         self.myCampaign = myCampaign
         self.buttonConfigs = buttonConfigs
-        self.isDeleteMode = isDeleteMode
-        self.isSelected = isSelected
-        self.onSelectionToggle = onSelectionToggle
+        self.onDetailTap = onDetailTap
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top, spacing: 4) {
-                Button(action: onSelectionToggle) {
-                    Image("check_circle_\(isSelected ? "filled" : "empty")")
-                        .frame(width: 24, height: 24)
-                }
-                .padding(.top, 4)
-                
                 thumbnailSection
                 
                 VStack(alignment: .leading, spacing: 8) {
@@ -43,6 +31,15 @@ struct MyCampaignRow: View {
                     campaignTextSection
                     platformListSection
                 }
+                
+                Spacer()
+                
+                
+                Button(action: onDetailTap) {
+                    Image("detail")
+                        .frame(width: 24, height: 24)
+                }
+                .padding(.top, 4)
             }
             
             if !buttonConfigs.isEmpty {

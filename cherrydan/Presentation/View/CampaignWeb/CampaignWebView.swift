@@ -9,7 +9,13 @@ struct CampaignWebView: View {
     
     var body: some View {
         CDScreen(horizontalPadding: 0) {
-            HStack(alignment: .center) {
+            HStack(alignment: .center, spacing: 0) {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image("chevron_left")
+                }
+                
                 Text(siteNameKr)
                     .font(.t3)
                     .foregroundStyle(.gray9)

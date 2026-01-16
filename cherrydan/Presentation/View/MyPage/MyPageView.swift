@@ -5,7 +5,7 @@ struct MyPageView: View {
     @StateObject private var viewModel = MyPageViewModel()
     
     private var currentAppVersion: String {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.2.5"
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.1.0"
     }
     
     var body: some View {

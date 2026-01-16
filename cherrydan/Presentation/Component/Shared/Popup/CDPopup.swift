@@ -5,16 +5,31 @@ struct CDPopup: View {
     let type: PopupType
     
     var body: some View {
+        if case .changeCampaignStatus(let currentStatus, let onConfirm) = type {
+            ChangeCampaignStatusPopupContent(
+                currentStatus: currentStatus,
+                onCancel: hidePopup,
+                onConfirm: { status in
+                    onConfirm(status)
+                    hidePopup()
+                }
+            )
+        } else {
+            defaultPopupContent
+        }
+    }
+
+    private var defaultPopupContent: some View {
         let config = type.config
-        
-        VStack(spacing: 4) {
+
+        return VStack(spacing: 4) {
             if let image = config.image, !image.isEmpty {
                 Image(image)
                     .padding(.bottom, 8)
             } else {
                 Spacer().frame(height: 8)
             }
-            
+
             Text(config.title)
                 .font(.t2)
                 .foregroundColor(.gray9)
@@ -35,7 +50,7 @@ struct CDPopup: View {
                     .multilineTextAlignment(.center)
                     .padding(.bottom, 20)
             }
-            
+
             buttonSection
         }
         .padding(16)

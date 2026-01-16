@@ -31,7 +31,17 @@ struct CDButton: View {
     private var foregroundColor: Color {
         isDisabled ? type.disabledForegroundColor : type.foregroundColor
     }
-    
+
+    private var strokeColor: Color {
+        if isDisabled {
+            if type == .middlePrimary || type == .largePrimary {
+                return .gray3
+            }
+            return type.disabledStrokeColor
+        }
+        return type.strokeColor ?? .clear
+    }
+
     var body: some View {
         Button(action: action) {
             if isLoading {
@@ -47,8 +57,8 @@ struct CDButton: View {
                     .foregroundStyle(foregroundColor)
                     .background(backgroundColor, in: RoundedRectangle(cornerRadius: cornerRadius))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 4)
-                            .stroke((type == .middlePrimary || type == .largePrimary) && isDisabled ? .gray3 : .clear , lineWidth: 1)
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .stroke(strokeColor, lineWidth: 1)
                     )
             }
         }

@@ -1,7 +1,6 @@
 import Foundation
 
 enum MyCampaignRoute: BaseRoute {
-    case category
     case categoryDetail
     case campaignWeb(siteNameKr: String, campaignSiteUrl: String)
     
@@ -16,8 +15,6 @@ enum MyCampaignRoute: BaseRoute {
     
     var analyticsName: String {
         switch self {
-        case .category:
-            "category_screen"
         case .categoryDetail:
             "category_detail_screen"
         case .campaignWeb:

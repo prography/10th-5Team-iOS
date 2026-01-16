@@ -98,12 +98,15 @@ class ManageSNSViewModel: ObservableObject {
 //    }
 //    
     /// 네이버 블로그 연결 처리
-    func connectNaverBlog(blogUrl: String) {
+    func connectNaverBlog(blogUrl: String, verificationCode: String) {
         isLoading = true
         
         Task {
             do {
-                let result = try await snsRepository.verifyNaverBlog(blogUrl: blogUrl)
+                let result = try await snsRepository.verifyNaverBlog(
+                    blogUrl: blogUrl,
+                    verificationCode: verificationCode
+                )
                 
                 if result.success {
                     naverBlogConnected = true

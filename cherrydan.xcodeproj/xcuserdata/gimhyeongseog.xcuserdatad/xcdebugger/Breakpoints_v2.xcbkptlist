@@ -3,4 +3,84 @@
    uuid = "7052318D-C31B-4EDB-8E09-6C8D475E31F6"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "990AEC4A-E891-434D-8313-52F56EC7FE0E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "cherrydan/Presentation/View/MyCampaign/MyCampaignViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "changeCampaignStatus(campaignId:to:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "990AEC4A-E891-434D-8313-52F56EC7FE0E - 33e82b10c8f58703"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #1 () async -&gt; () in cherrydan.MyCampaignViewModel.changeCampaignStatus(campaignId: Swift.Int, to: cherrydan.CampaignStatusType) -&gt; ()"
+                  moduleName = "cherrydan.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gimhyeongseog/Desktop/front-app/cherrydan/cherrydan/Presentation/View/MyCampaign/MyCampaignViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "98"
+                  endingLineNumber = "98">
+               </Location>
+               <Location
+                  uuid = "990AEC4A-E891-434D-8313-52F56EC7FE0E - 7ff03f45277614ea"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 () -&gt; () in closure #1 () async -&gt; () in cherrydan.MyCampaignViewModel.changeCampaignStatus(campaignId: Swift.Int, to: cherrydan.CampaignStatusType) -&gt; ()"
+                  moduleName = "cherrydan.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/gimhyeongseog/Desktop/front-app/cherrydan/cherrydan/Presentation/View/MyCampaign/MyCampaignViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "98"
+                  endingLineNumber = "98">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6103628A-8C93-456F-92B0-9E1F7D3F9949"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "cherrydan/Presentation/View/MyCampaign/MyCampaignViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
+            landmarkName = "changeCampaignStatus(campaignId:to:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2770536F-B385-4BD9-AF88-105D55A985B2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "cherrydan/Presentation/View/MyCampaign/MyCampaignViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "changeCampaignStatus(campaignId:to:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

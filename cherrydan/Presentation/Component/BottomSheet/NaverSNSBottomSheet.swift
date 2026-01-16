@@ -5,7 +5,7 @@ struct NaverSNSBottomSheet: View {
     @State private var blogUrl: String = ""
     @State private var verificationCode: String = "sjk43hdjk"
     
-    let onConnect: (String) -> Void
+    let onConnect: (String, String) -> Void
     
     var body: some View {
         CDBottomSheet(
@@ -13,7 +13,7 @@ struct NaverSNSBottomSheet: View {
                 text: "연동 완료",
                 disabled: blogUrl.isEmpty,
                 onClick: {
-                    onConnect(blogUrl)
+                    onConnect(blogUrl, verificationCode)
                     dismiss()
                 }
             )),
@@ -101,5 +101,5 @@ struct NaverSNSBottomSheet: View {
 }
 
 #Preview {
-    NaverSNSBottomSheet(onConnect: { _ in })
-} 
+    NaverSNSBottomSheet(onConnect: { _, _ in })
+}

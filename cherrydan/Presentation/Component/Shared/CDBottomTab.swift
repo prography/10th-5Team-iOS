@@ -7,7 +7,7 @@ struct CDBottomTab: View {
 //        ("category","카테고리"),
 //        ("notice_board","체리단 소식"),
         ("home","홈"),
-        ("my_campaign","내 체험단"),
+        ("my_campaign","나의 공고"),
         ("my","마이페이지")
     ]
     

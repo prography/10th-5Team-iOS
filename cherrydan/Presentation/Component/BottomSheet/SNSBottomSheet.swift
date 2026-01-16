@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// - note: 사용되지 않습니다.
 struct SNSBottomSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var platformUrl: String = ""

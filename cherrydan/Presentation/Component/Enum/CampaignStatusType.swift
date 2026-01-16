@@ -1,6 +1,7 @@
 import Foundation
 
-enum CampaignStatusType: CaseIterable, Codable {
+/// - note: 변경이 가능한 공고의 상태입니다.
+enum CampaignStatusType: CaseIterable, Codable, Equatable {
     case apply
     case notSelected
     case selected
@@ -36,6 +37,21 @@ enum CampaignStatusType: CaseIterable, Codable {
             "ENDED"
         }
     }
+    
+    var campaignSubfilter: CampaignSubFilter {
+        switch self {
+        case .apply:
+                .appliedCompleted
+        case .notSelected:
+                .resultNotSelected
+        case .selected:
+                .resultSelected
+        case .reviewing:
+                .reviewInProgress
+        case .ended:
+                .reviewCompleted
+        }
+    }
 }
 
 enum CampaignSubStatusLabel: String, Codable {
@@ -45,7 +61,7 @@ enum CampaignSubStatusLabel: String, Codable {
     var apiValue: String { rawValue }
 }
 
-enum CampaignSubFilter: String, Identifiable, Equatable {
+enum CampaignSubFilter: String, Identifiable, Equatable, Hashable {
     case likedOpen
     case likedClosed
     case appliedWaiting
@@ -80,54 +96,53 @@ enum CampaignSubFilter: String, Identifiable, Equatable {
     
     var emptyStateMessage: String {
         switch self {
-        case .likedOpen:
-            "신청 가능한 공고가 없어요"
-        case .likedClosed:
-            "신청 마감된 공고가 없어요"
-        case .appliedWaiting:
-            "발표를 기다리는 공고가 없어요"
-        case .appliedCompleted:
-            "결과 발표가 완료된 공고가 없어요"
-        case .resultSelected:
-            "선정된 공고가 없어요"
-        case .resultNotSelected:
-            "선정되지 않은 공고가 없어요"
+        case .likedOpen, .likedClosed:
+            "찜한 공고가 없네요.\n마음에 드는 공고를 찜해두면,\n언제든 쉽게 확인할 수 있어요."
+        case .appliedWaiting, .appliedCompleted:
+            "아직 신청한 공고가 없네요.\n체리단의 특별한 경험은\n공고신청에서 시작됩니다."
+        case .resultSelected, .resultNotSelected:
+            "아직 선정결과가 나온 공고가 없네요.\n체리단의 특별한 경험은\n공고신청에서 시작됩니다."
         case .reviewInProgress:
-            "리뷰 작성 중인 공고가 없어요"
+            "공고 미션과 유의사항을 잘 살펴보면\n콘텐츠 작성에 많은 도움이 됩니다."
         case .reviewCompleted:
-            "종료된 공고가 없어요"
+            "시작이 없으면 끝도 없습니다.\n공고 신청이 체리단 활동의 시작입니다."
         }
     }
     
-    var filterSource: FilterSource {
+    var category: CampaignStatusCategory {
         switch self {
-        case .likedOpen:
-            .bookmark(isOpen: true)
-        case .likedClosed:
-            .bookmark(isOpen: false)
-        case .appliedWaiting:
-            .campaignStatus(type: .apply, subStatus: .waiting)
-        case .appliedCompleted:
-            .campaignStatus(type: .apply, subStatus: .completed)
-        case .resultSelected:
-            .campaignStatus(type: .selected, subStatus: nil)
-        case .resultNotSelected:
-            .campaignStatus(type: .notSelected, subStatus: nil)
+        case .likedOpen,. likedClosed:
+                .liked
+        case .appliedWaiting, .appliedCompleted:
+                .applied
+        case .resultSelected, .resultNotSelected:
+                .result
         case .reviewInProgress:
-            .campaignStatus(type: .reviewing, subStatus: nil)
+                .writingReview
         case .reviewCompleted:
-            .campaignStatus(type: .ended, subStatus: nil)
+                .writingDone
+        }
+    }
+    
+    var statusType: CampaignStatusType? {
+        switch self {
+        case .likedOpen, .likedClosed:
+                nil
+        case .appliedWaiting, .appliedCompleted:
+                .apply
+        case .resultSelected:
+                .selected
+        case .resultNotSelected:
+                .notSelected
+        case .reviewInProgress:
+                .reviewing
+        case .reviewCompleted:
+                .ended
         }
     }
 }
 
-extension CampaignSubFilter {
-    enum FilterSource: Equatable {
-        case bookmark(isOpen: Bool)
-        case campaignStatus(type: CampaignStatusType, subStatus: CampaignSubStatusLabel?)
-    }
-}
-
+/// - note: 내 캠페인 탭 내부 보이는 상단 탭 내용입니다.
 enum CampaignStatusCategory: CaseIterable {
     case liked
     case applied

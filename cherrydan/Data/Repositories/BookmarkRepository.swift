@@ -37,7 +37,7 @@ class BookmarkRepository {
         let query = [
             "page": "\(page)",
             "size": "20",
-            "case": "open"
+            "case": "likedOpen"
         ]
         
         let response: APIResponse<PageableResponse<MyCampaignDTO>> = try await networkAPI.request(
@@ -51,7 +51,7 @@ class BookmarkRepository {
         let query = [
             "page": "\(page)",
             "size": "20",
-            "case": "closed"
+            "case": "likedClosed"
         ]
         
         let response: APIResponse<PageableResponse<MyCampaignDTO>> = try await networkAPI.request(
